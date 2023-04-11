@@ -1,0 +1,33 @@
+{
+  "name": "smartedu",
+  "version": "1.0.0",
+  "description": "Course platform",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^5.0.0",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "express-session": "^1.17.3",
+    "express-validator": "^6.15.0",
+    "mongo-connect": "^0.0.6",
+    "mongoose": "^7.0.3",
+    "nodemailer": "^6.9.1",
+    "openai": "^3.2.1",
+    "slugify": "^1.6.6",
+    "speakingurl": "^14.0.1",
+    "uninstall": "^0.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
