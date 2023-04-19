@@ -1,6 +1,6 @@
 import express from 'express'
 import User from '../models/User.js'
-import {body} from 'express-validator'
+import {body,validationResult} from 'express-validator'
 import AuthOperations from "../controllers/authController.js"
 
 const router = express.Router() 
@@ -19,19 +19,20 @@ const router = express.Router()
 // }
 
 router.post('/signup',
-[
-    body('name').not().isEmpty().withMessage('Please fill name field with your name!'),
-    body('email').isEmail().withMessage('Please fill Email field with your email!')
-    .custom(userEmail => {
-        return User.findOne({email:userEmail}).then(user => {
-            if(user) {
-                console.log(user)
-                return Promise.reject('E-mail is exsist already!')
+    [
+        body('name').not().isEmpty().withMessage('Please Enter Your Name'),
+        body('email').isEmail().normalizeEmail().withMessage('Please Enter Valid Email'),
+        body('password').not().isEmpty().withMessage('Please Enter A Password'),
+    ],async(req,res,next) => {
+        return User.find({email:req.body.email}).then(user => {
+            if (user.length > 0) {
+                req.flash('error', 'E-mail already in use!')
+                res.status(400).redirect('/register')
+            } else {
+             next()
             }
         })
-    }),
-    body('password').not().isEmpty().withMessage('Please fill password field!'),
-],AuthOperations.createUser) // http://localhost:3000/auth/signup 
+    },AuthOperations.createUser);
 router.post('/login',AuthOperations.loginUser) // http://localhost:3000/auth/login  
 router.get('/logout',AuthOperations.logoutUser) 
 export default router

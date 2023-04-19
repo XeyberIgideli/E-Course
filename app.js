@@ -47,7 +47,7 @@ app.use((req,res,next) => {
     next()
 })
 
-// Sessionun globalda istifadesi ucundur
+// For using sessions in global
 app.use('*',(req,res,next) => {
     userLoggedIn = req.session.userID
     next()

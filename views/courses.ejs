@@ -45,7 +45,7 @@
 										</div>
 										<div class="course-meta-bot">
 											<ul>
-												<li><i class="fa fa-user" aria-hidden="true"></i> <%= coursesData[i].user.name.toUpperCase() %></li>
+												<li><i class="fa fa-user" aria-hidden="true"></i> <%= coursesData[i].user === null ? 'Deleted user' : coursesData[i].user.name.toUpperCase() %></li>
 											</ul>
 										</div>
 									</div>

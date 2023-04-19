@@ -8,12 +8,30 @@
             <div class="section-title text-center">
                 <h3 class="mt-5">LOGIN</h3>
 
+  
+
             <div class="row">
                 <div class="col-xl-12 col-md-12 col-sm-12">
                     <div class="contact_form">
                         <!-- <div class="alert alert-primary" role="alert">
                         </div> -->
                         <form action="/auth/login" method="POST">
+
+                            <div class="offset-1 col-lg-10 col-md-10 col-sm-10">
+                                <% if (flashMessages) { %>
+                                    <% if (flashMessages.success) { %>
+                                      <div class="alert alert-success col-lg-9">
+                                    <%= flashMessages.success %> 
+                                    </div>
+                    
+                                  <% } else if (flashMessages.error) { %>
+                                   <div class="alert alert-danger col-lg-9">
+                                    <%= flashMessages.error %>
+                                    </div>
+                                    <% } %>
+                                  <% } %>
+                            </div>
+
                             <div class="row row-fluid">
                                 <div class="offset-1 col-lg-10 col-md-10 col-sm-10">
                                     <input type="email" name="email" id="email" class="form-control" placeholder="Email">

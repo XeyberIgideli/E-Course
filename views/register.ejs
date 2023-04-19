@@ -7,23 +7,25 @@
 	        <div class="container">
             <div class="section-title text-center">
                 <h3 class="mt-5">REGISTER</h3>
-                <% if (flashMessages) { %>
-                    <% if (flashMessages.success) { %>
-                      <div class="alert alert-success col-lg-9">
-                    <%= flashMessages.success %> 
-                    </div>
-    
-                  <% } else if (flashMessages.error) { %>
-                   <div class="alert alert-danger col-lg-9">
-                    <%= flashMessages.error %>
-                    </div>
-                    <% } %>
-                  <% } %>
+                <div class="col-md-12 col-sm-12 col-xl-12">
+                    <% if (flashMessages) { %>
+                        <% if (flashMessages.success) { %>
+                          <div class="alert alert-success col-lg-9">
+                        <%= flashMessages.success %> 
+                        </div>
+        
+                      <% } else if (flashMessages.error) { %>
+                       <div class="alert alert-danger col-lg-9">
+                        <%= flashMessages.error %>
+                        </div>
+                        <% } %>
+                      <% } %>
+                </div>
             <div class="row">
                 <div class="col-xl-12 col-md-12 col-sm-12">
                     <div class="contact_form">
                         <div id="message"></div>
-                        <form action="/auth/signup" method="POST">
+                        <form action="/auth/signup" method="POST" novalidate>
                             <div class="row row-fluid">
 							    <div class="offset-1 col-lg-10 col-md-10 col-sm-10">
                                     <input type="text" name="name" id="name" class="form-control" placeholder="Name">

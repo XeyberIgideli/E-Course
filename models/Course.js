@@ -31,7 +31,7 @@ const CourseSchema = new Schema({
 { timestamps: true })
 
 CourseSchema.pre('validate', function(next) {
-    // Burada normal funksiya isledilci cunki arrow function this-e sahib deyil
+    // Burada normal funksiya isledildi cunki arrow function this-e sahib deyil
     this.slug = slugify(this.title,{
         lower: true,
         strict: true

@@ -31,8 +31,7 @@ class courseOperations {
             } 
             
             const coursesData = await Course.find(filter).sort('-createdAt').populate('user') 
-            const categoryData = await Category.find()
-
+            const categoryData = await Category.find() 
             res.status(200).render('courses', {
                 coursesData,
                 categoryData,

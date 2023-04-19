@@ -4,11 +4,12 @@ import bcrypt from 'bcrypt'
 
 class authOperations {
     createUser = async (req,res) => {
-        try {
+        try { 
+            const isExist = await User.findOne({email:req.body.email})
             const userSignup = await User.create(req.body)
             res.status(201).redirect('/login')
         } catch (error) {
-            const errors = validationResult(req)
+            const errors = validationResult(req) 
             errors.array().map(item => req.flash('error',`${item.msg}`))
             res.status(400).redirect('/register')
         }
@@ -26,9 +27,11 @@ class authOperations {
                     
                     res.status(200).redirect('/dashboard')
                 } else {
+                    req.flash('error','Your password is not correct!')
                     res.status(401).redirect('/login')
                 }
             } else {
+                req.flash('error','Your email is not correct!')
                 res.status(401).redirect('/login')
             }
         } catch (error) {
