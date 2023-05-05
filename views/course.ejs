@@ -39,19 +39,82 @@
 					
 					<div class="blog-author">
 						<div class="author-bio">
-							<h3 class="author_name"><a href="#"><%= course.user === null ? 'Deleted user' : course.user.name %></a></h3>
-							<h5>CEO at <a href="#">SmartEDU</a></h5>
-							<p class="author_det">
-								Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt  ut aut reiciendise voluptat maiores alias consequaturs aut perferendis doloribus omnis saperet docendi nec, eos ea alii molestiae aliquand.
-							</p>
+							<form action="/courses/course/<%= course.slug %>" method="POST">
+								<textarea name="comment" style="width: 100%" id="" cols="30" rows="2"></textarea>
+								<input type="text" name="course" value="<%= course.id %>" hidden>
+								<button type="submit" class="btn btn-warning">Submit</button>
+							</form>
 						</div>
-						<div class="author-desc">
-							<img src="/images/author.jpg" alt="about author">
-							<ul class="author-social">
-								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fa fa-skype"></i></a></li>
-							</ul>
+						<div class="author-bio">
+							<% comments.forEach((comment) => { %>
+								<ul class="author-social">
+									<li class="listCom" style="display: flex;flex-direction: column;justify-content: space-between;">
+
+											<% if (comment.parentId === null) { %>
+												<div class="comment" style="display: flex;flex-direction: row;gap: 30px;">
+													<img src="/images/author.jpg" width="80px" height="80px" alt="about author">
+													<a href="#"><%= comment.comment %></a>
+													<div class="reply-button">
+														<form action="/courses/course/<%= course.slug %>" method="POST">
+															<textarea name="comment" style="width: 50%" id="" cols="30" rows="1"></textarea>
+															<input type="text" name="parentId" value="<%= comment.id %>" hidden>
+															<input type="text" name="course" value="<%= course.id %>" hidden>
+															<button type="submit" class="btn btn-warning">Reply</button>
+														</form>
+													</div> 
+												</div>
+											<% } %>
+											
+											<% const replies = getReplies(comment.id); let index = 0;%> 
+											<% if (replies.length > 0) { %>
+												<div class="replies" >
+														<% for( let j = 0; j < replies.length; j++ ) { %>
+															<%= renderReply(replies[j]) %> 
+														<% } %>
+													
+												</div>
+											<% } %>
+																					
+									</li> 
+								</ul>
+							<% }) %> 
+							<% function getReplies(commentId,parentId = null) { 
+								     const filtered = comments.filter((comment) => String(comment.parentId) === commentId);
+									 console.log(filtered)
+									 return filtered
+							 } %>	
+
+
+							<% function replyPlaceholder(reply) { %>	
+								<div class="reply" style="margin-bottom: 10px;margin-left: 100px;padding:20px">
+									<div class="comment" style="display: flex;flex-direction: row;gap: 30px;">
+										<img src="/images/author.jpg" width="80px" height="80px" alt="about author">
+										<a href="#"><%= reply.comment %></a>
+										<!-- <div class="reply-button">
+											<form action="/courses/course/<%= course.slug %>" method="POST">
+												<textarea name="comment" style="width: 50%" id="" cols="30" rows="1"></textarea>
+												<input type="text" name="parentId" value="<%= reply.id %>" hidden>
+												<input type="text" name="course" value="<%= course.id %>" hidden>
+												<button type="submit" class="btn btn-danger">Reply</button>
+											</form>
+										</div>  -->
+									</div>
+							<% } %>	
+
+							<% function renderReply(reply) { %>
+									<% replyPlaceholder(reply) %>
+									
+									<% const subReplies = getReplies(reply.id,reply.parentId); %>
+									<% if (subReplies.length > 0) { %>
+										<div class="replies">											
+											<% subReplies.forEach((subReply) => { %>
+												<%= renderReply(subReply) %>
+											<% }) %>
+										</div>
+									<% } %>
+								</div>
+							<% } %>
+
 						</div>
 					</div>
 					

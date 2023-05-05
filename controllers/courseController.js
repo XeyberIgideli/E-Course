@@ -1,9 +1,10 @@
 import Course from '../models/Course.js'
 import User from '../models/User.js'
 import Category from '../models/Category.js'
+import Comments from '../models/Comments.js'
 
 class courseOperations {
-    CreateCourse = async (req,res) => {
+    createCourse = async (req,res) => {
         try {
             const courseData = await Course.create({...req.body, user:req.session.userID})
             req.flash("success","Your course has been created!")
@@ -18,7 +19,6 @@ class courseOperations {
         try {
             const categoryQuery = req.query.category
             const searchQuery = req.query.search
-            
             let filter = {}
             
             if(categoryQuery) {
@@ -48,6 +48,7 @@ class courseOperations {
     getCourse = async(req,res) => {
         const course = await Course.findOne({slug:req.params.slug}).populate('user')
         const user = await User.findById(req.session.userID)
+        const comments = await Comments.find({course:course.id}).populate('user')
         const categoryData = await Category.find()
 
         try {
@@ -57,7 +58,8 @@ class courseOperations {
                 userRole: req.session.userRole,
                 userSID: req.session.userID,
                 user,
-                page_name: 'course'
+                page_name: 'course',
+                comments
             })
         } catch(error) {
             res.status(400).json({
@@ -93,6 +95,33 @@ class courseOperations {
             res.status(400).json({
                 status: 'failed',
                 err
+            })
+        }
+    }
+
+    deleteCourse = async(req,res) => {
+        try {
+            const course = await Course.findOneAndRemove({slug:req.params.slug})
+            req.flash("error","The Course has been removed successfully")
+            res.status(200).redirect('/dashboard')
+        } catch(error) {
+            res.status(400).json({
+                error
+            })
+        }
+    }
+
+    sendMessage = async(req,res) => {
+        try {
+            const messageData = await Comments.create({
+                ...req.body,
+                user:req.session.userID,
+                parentId: req.body.parentId ?? null,
+            })  
+            res.redirect('/courses/' + req.params.slug)
+        } catch(error) {
+            res.status(400).json({
+                error
             })
         }
     }

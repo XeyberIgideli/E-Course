@@ -27,8 +27,7 @@ class Pages {
 
     getDashboardPage = async (req,res) => {
         const userData = await User.findOne({_id:req.session.userID}).populate('enrolledCourses')
-        const coursesByTeacher = await Course.find({user: req.session.userID})
-    
+        const coursesByTeacher = await Course.find({user: req.session.userID}).populate('user')
         const categories = await Category.find()
         res.status(200).render('dashboard',
         {

@@ -106,6 +106,10 @@
 							<div class="course-desc">
 								<p><%= coursesByTeacher[i].description %></p>
 							</div>
+							<form action="/courses/<%= coursesByTeacher[i].slug %>" method="POST" class="post-date">
+								<!-- <input type="hidden" name="course_id" value=""> -->
+								<button class="btn btn-danger text-white" type="submit">DELETE</button>
+							</form>
 						</div>
 					</div>
                 </div>
