@@ -10,7 +10,7 @@
                 <div class="col-lg-9 blog-post-single">
                     <div class="blog-item">
 						<div class="image-blog">
-							<img src="/images/blog_single.jpg" alt="" class="img-fluid">
+							<img src="<%= course.courseImage %>" alt="" class="img-fluid">
 						</div>
 						<div class="post-content">
 							<% if (userRole === 'student') { %>
@@ -27,6 +27,7 @@
 							<% } %>
 							<div class="meta-info-blog">
 								<span><i class="fa fa-calendar"></i> <a href="#"><%= course.createdAt %></a> </span>
+								<span>teacher: <span class="text-warning"><%= course.user.name %></span></span>
 							</div>
 							<div class="blog-title">
 								<h2><a href="#" title=""><%= course.title %></a></h2>
@@ -39,6 +40,7 @@
 					
 					<div class="blog-author">
 						<div class="author-bio">
+							<h2>Drop your thoughts on this course!</h2>
 							<form action="/courses/course/<%= course.slug %>" method="POST">
 								<textarea name="comment" style="width: 100%" id="" cols="30" rows="2"></textarea>
 								<input type="text" name="course" value="<%= course.id %>" hidden>

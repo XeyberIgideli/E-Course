@@ -3539,7 +3539,7 @@ blockquote.default {
 	height: 100%;
 	min-height: 100%;
 	overflow: hidden;
-	padding: 20px 0;
+	padding: 10px 0;
 	position: absolute;
 	text-align: center;
 	width: 25%;
@@ -3751,7 +3751,7 @@ a.link-style3 {
     text-indent: -5555em;
     line-height: 100;
     overflow: hidden;
-    background: #eea412 url(images/search-icon.png) no-repeat center 14px;
+    background: #eea412 url(../images/search-icon.png) no-repeat center 14px;
     border: 0;
     transition: all 0.4s ease-in-out;
     -webkit-transition: all 0.4s ease-in-out;

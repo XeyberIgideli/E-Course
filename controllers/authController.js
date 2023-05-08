@@ -1,12 +1,27 @@
 import User from '../models/User.js'
 import {validationResult} from 'express-validator'
+import fs from 'fs'
 import bcrypt from 'bcrypt'
+import path from 'path'
+import helper from '../utils/helper.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 class authOperations {
     createUser = async (req,res) => {
         try { 
-            const isExist = await User.findOne({email:req.body.email})
-            const userSignup = await User.create(req.body)
+            let uploadedImage = req.files.avatarImg 
+            let imageExt = uploadedImage.name.substring(uploadedImage.name.lastIndexOf('.'))
+            let uniqueImageName = helper.uniqueID(uploadedImage.name.substring(0,uploadedImage.name.lastIndexOf('.')),8)
+            let uploadPath = __dirname + '/../public/uploads/' + uniqueImageName + imageExt
+            uploadedImage.mv(uploadPath,async () => {
+                await User.create({
+                    ...req.body,
+                    avatarImg: '/uploads/' + uniqueImageName + imageExt
+                })                 
+            })
             res.status(201).redirect('/login')
         } catch (error) {
             const errors = validationResult(req) 
@@ -43,7 +58,7 @@ class authOperations {
     }
 
     logoutUser = (req,res) => {
-        req.session.destroy(() => {
+        req.session.destroy(() => { 
             res.status(200).redirect('/')
         })
     }

@@ -5,8 +5,16 @@ import Category from '../models/Category.js'
 import nodemailer from 'nodemailer'
 
 class Pages {
-    getIndexPage = (req,res) => {
-        res.status(200).render('index',{page_name:'index'})
+    getIndexPage = async (req,res) => {
+        const userCount = await User.find({role:'student'}).countDocuments()     
+        const teacherCount = await User.find({role:'teacher'}).countDocuments()     
+        const courseCount = await Course.find().countDocuments()     
+        res.status(200).render('index',{
+            page_name:'index',
+            userCount,
+            courseCount,
+            teacherCount
+        })
     }
 
     getAboutPage = (req,res) => {
@@ -44,24 +52,7 @@ class Pages {
     
     postEmail = (req,res) => {
         // console.log(req.body)
-    }
-
-    getGptPage = async (req,res) => {
-
-        const configuration = new Configuration({
-            apiKey: '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',
-          });
-          const openai = new OpenAIApi(configuration);
-          
-          const completion = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: "How are you?",
-          });
-
-          console.log(completion.data.choices[0].text);
-
-        res.status(200).render('gpt')
-    }
+    } 
 
 }
 

@@ -20,6 +20,9 @@ const UserSchema = new Schema({
         required: true,
         trim:true
     },
+    avatarImg:{
+        type: String
+    },
     role: {
         type: String,
         enum: ['student','teacher','admin'],

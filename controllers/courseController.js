@@ -2,16 +2,37 @@ import Course from '../models/Course.js'
 import User from '../models/User.js'
 import Category from '../models/Category.js'
 import Comments from '../models/Comments.js'
+import fs from 'fs'
+import helper from '../utils/helper.js' 
 
 class courseOperations {
     createCourse = async (req,res) => {
         try {
-            const courseData = await Course.create({...req.body, user:req.session.userID})
-            req.flash("success","Your course has been created!")
+
+            const uploadDir = 'public/uploads/course'
+
+            if(!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir)
+            }   
+            let uploadedImage = req.files.courseImage 
+            let imageExt = uploadedImage.name.substring(uploadedImage.name.lastIndexOf('.'))
+            let uniqueImageName = helper.uniqueID(uploadedImage.name.substring(0,uploadedImage.name.lastIndexOf('.')),8)
+            let uploadPath = globalDirName + '/controllers/' + '/../public/uploads/course/' + uniqueImageName + imageExt
+
+            uploadedImage.mv(uploadPath,async() => {
+                await Course.create({
+                        ...req.body,
+                        courseImage: '/uploads/course/' + uniqueImageName + imageExt,
+                        user:req.session.userID
+                })
+                req.flash("success","Your course has been created!")
+            })
             res.status(200).redirect('/courses')
+
         } catch (error) {
-            req.flash("error","Something wrong happened!")
-            res.status(400).redirect('/courses')
+            // req.flash("error","Something wrong happened!")
+            // res.status(400).redirect('/courses')
+            res.json({error})
         }
     }
 
@@ -101,7 +122,13 @@ class courseOperations {
 
     deleteCourse = async(req,res) => {
         try {
-            const course = await Course.findOneAndRemove({slug:req.params.slug})
+            const course = await Course.findOne({slug:req.params.slug})
+            let deletedImage = globalDirName + '/controllers/' + '/../public' + course.courseImage
+            if(!course.courseImage !== '') {
+                fs.unlinkSync(deletedImage)
+            }
+            await Course.findOneAndRemove({slug:req.params.slug})
+            
             req.flash("error","The Course has been removed successfully")
             res.status(200).redirect('/dashboard')
         } catch(error) {
@@ -111,7 +138,7 @@ class courseOperations {
         }
     }
 
-    sendMessage = async(req,res) => {
+    sendComment = async(req,res) => {
         try {
             const messageData = await Comments.create({
                 ...req.body,
@@ -123,6 +150,17 @@ class courseOperations {
             res.status(400).json({
                 error
             })
+        }
+    }
+
+    updateCourse = async(req,res) => {
+        try {
+            const {title,description,category} = req.body
+            const updatedCourse = await Course.findOneAndUpdate({slug:req.params.slug}, {title,description,category}, { new: true });
+            res.status(200).redirect('/dashboard')
+
+        } catch(error) {
+            res.status(400).json({ error: error.message });
         }
     }
 

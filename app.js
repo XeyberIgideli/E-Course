@@ -3,7 +3,7 @@ import ejs from 'ejs'
 import fs from 'fs'
 import methodOverride from 'method-override'
 import mongoose from 'mongoose'
-// import fileUpload from 'express-fileupload'
+import fileUpload from 'express-fileupload'
 import session from 'express-session'
 import flash from 'connect-flash'
 import MongoStore from 'connect-mongo' // Sessionlarin database'de tutulmasi ucun
@@ -11,6 +11,12 @@ import pageRoute from './routes/pageRoute.js'
 import courseRoute from './routes/courseRoute.js'
 import categoryRoute from './routes/categoryRoute.js'
 import userRoute from './routes/userRoute.js'
+
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const app = express()
 
@@ -30,6 +36,7 @@ app.set('view engine', 'ejs')
 
 // Global variables
 global.userLoggedIn = null
+global.globalDirName = null
 
 // Middlewares
 app.use(express.static('public'))
@@ -39,7 +46,8 @@ app.use(
     methodOverride('_method',{
         methods:['POST','GET']
     })
-)
+    )
+app.use(fileUpload())
 
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
@@ -58,6 +66,7 @@ app.use((req,res,next) => {
 // For using sessions in global
 app.use('*',(req,res,next) => {
     userLoggedIn = req.session.userID
+    globalDirName = __dirname
     next()
 })
 

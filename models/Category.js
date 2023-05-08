@@ -24,7 +24,6 @@ CategorySchema.pre('validate', function(next) {
         '+': '-plus'
       }
     });
-    console.log(this.slug);
     next();
   });
 
