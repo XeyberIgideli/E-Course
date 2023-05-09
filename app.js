@@ -49,6 +49,7 @@ app.use(
     )
 app.use(fileUpload())
 
+// For store session keys in database
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
   secret: 'keyboard cat',
@@ -73,7 +74,7 @@ app.use('*',(req,res,next) => {
 // Routes
 app.use('/', pageRoute)
 app.use('/courses', courseRoute)
-app.use('/category', categoryRoute)
+app.use('/categories', categoryRoute)
 app.use('/auth', userRoute)
 
 
