@@ -7,10 +7,13 @@ import fileUpload from 'express-fileupload'
 import session from 'express-session'
 import flash from 'connect-flash'
 import MongoStore from 'connect-mongo' // Sessionlarin database'de tutulmasi ucun
+
 import pageRoute from './routes/pageRoute.js'
 import courseRoute from './routes/courseRoute.js'
 import categoryRoute from './routes/categoryRoute.js'
 import userRoute from './routes/userRoute.js'
+
+import RedirectMiddlewares from './middlewares/Redirects.js'
 
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -76,6 +79,9 @@ app.use('/', pageRoute)
 app.use('/courses', courseRoute)
 app.use('/categories', categoryRoute)
 app.use('/auth', userRoute)
+
+// Error middlewares
+app.use(RedirectMiddlewares.notFound)
 
 
 app.listen(3000)

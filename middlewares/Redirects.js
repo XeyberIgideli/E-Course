@@ -16,6 +16,9 @@ class Redirects {
             next()
         }
     }
+    notFound = (req,res,next) => {
+        res.status(404).send('Page not found!')
+    } 
 }
 
 const RedirectMiddlewares = new Redirects()
