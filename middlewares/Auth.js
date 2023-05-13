@@ -10,6 +10,21 @@ class AuthMiddleware {
         }
     }
 
+    checkForm = async(req,res,next) => {
+          if(!req.body.name) {
+            req.flash('error', 'Please provide your name!')
+            res.status(400).redirect('/register')
+        } else if(!req.body.email) {
+            req.flash('error', 'Please provide your email adress!')
+            res.status(400).redirect('/register')
+        } else if(!req.body.password) {
+            req.flash('error', 'Please provide a password!')
+            res.status(400).redirect('/register')
+        } else {
+            next()
+        }
+    }
+
 }
 
 const authMiddlewares = new AuthMiddleware()

@@ -1,18 +1,11 @@
-import express from 'express'
-import {body,validationResult} from 'express-validator'
+import express from 'express' 
 import AuthOperations from "../controllers/authController.js"
 import authMiddlewares from '../middlewares/Auth.js'
 import fileMiddlewares from '../middlewares/Files.js'
 
 const router = express.Router() 
 
-router.post('/signup',
-    [
-        body('name').not().isEmpty().withMessage('Please Enter Your Name'),
-        body('email').isEmail().normalizeEmail().withMessage('Please Enter Valid Email'),
-        body('password').not().isEmpty().withMessage('Please Enter A Password'),
-    ],
-    authMiddlewares.isEmailExist,
+router.post('/signup',authMiddlewares.isEmailExist,authMiddlewares.checkForm,
     fileMiddlewares.checkImageUpload(['png', 'jpeg', 'jpg', 'gif'],['image/png', 'image/jpeg', 'image/jpg', 'image/gif'],'avatarImg'),
     AuthOperations.createUser);
 

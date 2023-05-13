@@ -1,5 +1,4 @@
-import User from '../models/User.js'
-import {validationResult} from 'express-validator'
+import User from '../models/User.js' 
 import fs from 'fs'
 import bcrypt from 'bcrypt'
 import path from 'path'
@@ -16,16 +15,18 @@ class authOperations {
             let imageExt = uploadedImage.name.substring(uploadedImage.name.lastIndexOf('.'))
             let uniqueImageName = helper.uniqueID(uploadedImage.name.substring(0,uploadedImage.name.lastIndexOf('.')),8)
             let uploadPath = __dirname + '/../public/uploads/' + uniqueImageName + imageExt
-            uploadedImage.mv(uploadPath,async () => {
-                await User.create({
-                    ...req.body,
-                    avatarImg: '/uploads/' + uniqueImageName + imageExt
-                })                 
-            })
-            res.status(201).redirect('/login')
+            // if(req.body) {
+                uploadedImage.mv(uploadPath,async () => {
+                    await User.create({
+                        ...req.body,
+                        avatarImg: '/uploads/' + uniqueImageName + imageExt
+                    })                 
+                })
+                res.status(201).redirect('/login')
+            // }
+
         } catch (error) {
-            const errors = validationResult(req) 
-            errors.array().map(item => req.flash('error',`${item.msg}`))
+            req.flash('error', 'Something went wrong!')
             res.status(400).redirect('/register')
         }
     }
